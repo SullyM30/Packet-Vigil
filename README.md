@@ -2,6 +2,25 @@
 
 A real-time hybrid network intrusion detection system (NIDS) that combines an Autoencoder (AE) and Random Forest (RF) in a two-stage pipeline. Built for live network capture on Linux and offline PCAP replay, with a web dashboard for live monitoring.
 
+[![PacketVigil poster](docs/assets/poster.png)](docs/PacketVigil_Poster.pdf)
+
+### Results at a glance
+
+On 6 of the 7 test datasets (Kitsune attack scenarios), on a 3-core VM with no GPU:
+
+| Recall | Precision | Throughput | FE+ML latency |
+|---|---|---|---|
+| >90% | >95% | ~1200 pkt/s | 0.7 ms / packet |
+
+Details, including the SYN-DoS limitation, are in [docs/RESULTS.md](docs/RESULTS.md).
+
+### Documentation
+
+- [Architecture and design decisions](docs/ARCHITECTURE.md)
+- [Module design](docs/MODULE_DESIGN.md)
+- [Build and test results](docs/RESULTS.md)
+- [Poster (PDF)](docs/PacketVigil_Poster.pdf) and [Final Project Binder (PDF)](docs/PacketVigil_Final_Project_Binder.pdf)
+
 ---
 
 ## How It Works
@@ -167,6 +186,8 @@ Three tabs:
 ---
 
 ## Acknowledgements
+
+PacketVigil was built by Sully Mrkva, Aiden Wang, Al Taber, Siri Rao, Joshua Manuel, and Dheeraj Indela as an ECE capstone project at Virginia Tech. Thanks to our customer, Dr. Christiana Garcia, and our mentor, Dr. Joe Adams.
 
 The feature-extraction layer in `NetworkIngestion/` (`AfterImage.py`, `netStat.py`, and the Cython variant `AfterImage_cy`) is derived from **[Kitsune-py](https://github.com/ymirsky/Kitsune-py)** by Yisroel Mirsky, released under the MIT License (Copyright (c) 2018 Yisroel Mirsky). The 115-feature damped incremental statistics approach (AfterImage) originates from that work. PacketVigil's own contributions, including the autoencoder + Random Forest hybrid pipeline, live/replay detectors, and the dashboard, are separate from it. `FeatureExtractor.py` follows the Kitsune feature layout.
 
