@@ -11,7 +11,7 @@ Raw packets → AfterImage (115 features) → AE reconstruction error
     → if error > AE_THRESHOLD → RF classifier → attack / benign verdict
 ```
 
-1. **AfterImage / netStat** — Incrementally tracks per-flow and per-host statistics using exponential decay, producing 115 features per packet without storing raw traffic.
+1. **AfterImage / netStat** — Incrementally tracks per-flow and per-host statistics using exponential decay, producing 115 features per packet without storing raw traffic. These modules are adapted from the [Kitsune-py](https://github.com/ymirsky/Kitsune-py) project by Yisroel Mirsky (see [Acknowledgements](#acknowledgements)).
 2. **Autoencoder** — Trained exclusively on benign traffic. Attack packets produce abnormally high reconstruction error.
 3. **Random Forest** — Secondary classifier run only on AE-flagged packets to reduce false positives and give a final verdict.
 4. **UI Bridge** — Pushes live alerts and metrics (precision, recall, F1) to the Dash dashboard every 5 seconds.
@@ -165,3 +165,11 @@ Three tabs:
 - **Settings** — AE and RF threshold sliders with live apply.
 
 ---
+
+## Acknowledgements
+
+The feature-extraction layer in `NetworkIngestion/` (`AfterImage.py`, `netStat.py`, and the Cython variant `AfterImage_cy`) is derived from **[Kitsune-py](https://github.com/ymirsky/Kitsune-py)** by Yisroel Mirsky, released under the MIT License (Copyright (c) 2018 Yisroel Mirsky). The 115-feature damped incremental statistics approach (AfterImage) originates from that work. PacketVigil's own contributions, including the autoencoder + Random Forest hybrid pipeline, live/replay detectors, and the dashboard, are separate from it. `FeatureExtractor.py` follows the Kitsune feature layout.
+
+If you use this project, please also cite the original paper:
+
+> Y. Mirsky, T. Doitshman, Y. Elovici, and A. Shabtai, "Kitsune: An Ensemble of Autoencoders for Online Network Intrusion Detection," *Network and Distributed System Security Symposium (NDSS)*, 2018.
